@@ -1,0 +1,21 @@
+{
+  "name": "nodejs-hw",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yaroslav13-13/nodejs-hw.git"
+  },
+  "keywords": [],
+  "author": "Yaroslav_Pron <frilanserwork13@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Yaroslav13-13/nodejs-hw/issues"
+  },
+  "homepage": "https://github.com/Yaroslav13-13/nodejs-hw#readme",
+  "description": ""
+}
