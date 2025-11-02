@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 import cors from 'cors';
 import pino from 'pino-http';
+import mongoose from 'mongoose';
 
 dotenv.config();
 const app = express();
@@ -54,6 +55,7 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3000;
+const MONGO_URL = process.env.MONGO_URL;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
