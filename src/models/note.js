@@ -1,10 +1,10 @@
-import { Schema } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const notesSchema = new Schema(
   {
     title: {
       type: String,
-      require: true,
+      required: true,
       trim: true,
     },
     content: {
@@ -26,7 +26,7 @@ const notesSchema = new Schema(
         'Important',
         'Todo',
       ],
-      default: 'todo',
+      default: 'Todo',
     },
   },
   {
