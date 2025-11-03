@@ -15,7 +15,7 @@ app.use(helmet());
 app.use(logger);
 app.use(
   express.json({
-    // limit: '100kb',
+    limit: '100kb',
   }),
 );
 app.use(cors());
