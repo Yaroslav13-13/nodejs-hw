@@ -2,8 +2,11 @@ import express from 'express';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
 import cors from 'cors';
-import pino from 'pino-http';
-import mongoose from 'mongoose';
+import { logger } from './middleware/logger.js';
+import { connectMongoDB } from './db/connectMongoDB.js';
+import { notFoundHandler } from './middleware/notFoundHandler.js';
+import { errorHandler } from './middleware/errorHandler.js';
+import { notesRouter } from './routes/notesRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -11,51 +14,22 @@ const app = express();
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
-app.use(
-  pino({
-    level: 'info',
-    transport: {
-      target: 'pino-pretty',
-      options: {
-        colorize: true,
-        translateTime: 'HH:MM:ss',
-        ignore: 'pid,hostname',
-        messageFormat:
-          '{req.method} {req.url} {res.statusCode} - {responseTime}ms',
-        hideObject: true,
-      },
-    },
-  }),
-);
+app.use(logger);
 
-app.get('/', (req, res) => {
-  res.status(200).json({ message: 'Hello world!' });
-});
+// ======= ROUTES =======
 
-app.get('/notes', (req, res) => {
-  res.status(200).json({ message: 'Retrieved all notes' });
-});
+app.use('/', notesRouter);
 
-app.get('/notes/:noteId', (req, res) => {
-  const { noteId } = req.params;
-  res.status(200).json({ message: `Retrieved note with ID: ${noteId}` });
-});
+// ======= MIDDLEWARE =======
 
-app.get('/test-error', () => {
-  throw new Error('Simulated server error');
-});
+app.use(notFoundHandler);
+app.use(errorHandler);
 
-app.use((req, res) => {
-  res.status(404).json({ message: 'Route not found' });
-});
-
-app.use((err, req, res, next) => {
-  console.error('Server error:', err.message);
-  res.status(500).json({ message: err.message });
-});
+// ======= START SERVER =======
 
 const PORT = process.env.PORT || 3000;
-const MONGO_URL = process.env.MONGO_URL;
+
+await connectMongoDB();
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
