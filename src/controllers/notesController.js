@@ -1,9 +1,32 @@
 import { Note } from '../models/note.js';
 import createHttpError from 'http-errors';
 
+// export const getAllNotes = async (req, res, next) => {
+//   try {
+//     const { tag, search } = req.query;
+//     const filter = {};
+//     if (tag) {
+//       filter.tag = tag;
+//     }
+//     if (search) {
+//       filter.$text = { $search: search };
+//     }
+
+//     const notes = await Note.find(filter);
+//     res.status(200).json({ notes });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// =====================================================
+
 export const getAllNotes = async (req, res, next) => {
   try {
-    const { tag, search } = req.query;
+    // параметри запиту
+    const { tag, search, page = 1, perPage = 10 } = req.query;
+
+    // фільтрація
     const filter = {};
     if (tag) {
       filter.tag = tag;
@@ -12,8 +35,29 @@ export const getAllNotes = async (req, res, next) => {
       filter.$text = { $search: search };
     }
 
-    const notes = await Note.find(filter);
-    res.status(200).json({ notes });
+    // пропуск
+    const skip = (page - 1) * perPage;
+
+    // Запит базовий
+    const notesQuery = Note.find(filter);
+
+    // паралельні запити
+    const [notes, totalNotes] = await Promise.all([
+      notesQuery.clone().countDocuments(),
+      notesQuery.skip(skip).limit(Number(perPage)).sort({ createdAt: -1 }),
+    ]);
+
+    // кількість сторінок
+    const totalPages = Math.ceil(totalNotes / perPage);
+
+    // відправка відповіді
+    res.status(200).json({
+      page: Number(page),
+      perPage: Number(perPage),
+      totalNotes,
+      totalPages,
+      notes,
+    });
   } catch (error) {
     next(error);
   }
