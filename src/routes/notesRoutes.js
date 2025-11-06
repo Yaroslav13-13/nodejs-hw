@@ -10,7 +10,7 @@ import {
 } from '../controllers/notesController.js';
 
 import {
-  getNotesSchema,
+  getAllNotesSchema,
   noteIdSchema,
   createNoteSchema,
   updateNoteSchema,
@@ -18,7 +18,7 @@ import {
 
 const notesRouter = Router();
 
-notesRouter.get('/notes', celebrate(getNotesSchema), getAllNotes);
+notesRouter.get('/notes', celebrate(getAllNotesSchema), getAllNotes);
 notesRouter.get('/notes/:noteId', celebrate(noteIdSchema), getNoteById);
 notesRouter.post('/notes', celebrate(createNoteSchema), createNote);
 notesRouter.patch('/notes/:noteId', celebrate(updateNoteSchema), updateNote);
