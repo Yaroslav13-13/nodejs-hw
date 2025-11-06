@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { TAGS } from '../constants/tags.js';
 
 const notesSchema = new Schema(
   {
@@ -14,18 +15,7 @@ const notesSchema = new Schema(
     },
     tag: {
       type: String,
-      enum: [
-        'Work',
-        'Personal',
-        'Meeting',
-        'Shopping',
-        'Ideas',
-        'Travel',
-        'Finance',
-        'Health',
-        'Important',
-        'Todo',
-      ],
+      enum: TAGS,
       default: 'Todo',
     },
   },
@@ -33,4 +23,8 @@ const notesSchema = new Schema(
     timestamps: true,
   },
 );
+
+// текстовий індекс для пошуку за title та content
+notesSchema.index({ title: 'text', content: 'text' });
+
 export const Note = model('Note', notesSchema);

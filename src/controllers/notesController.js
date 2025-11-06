@@ -3,8 +3,17 @@ import createHttpError from 'http-errors';
 
 export const getAllNotes = async (req, res, next) => {
   try {
-    const notes = await Note.find();
-    res.status(200).json(notes);
+    const { tag, search } = req.query;
+    const filter = {};
+    if (tag) {
+      filter.tag = tag;
+    }
+    if (search) {
+      filter.$text = { $search: search };
+    }
+
+    const notes = await Note.find(filter);
+    res.status(200).json({ notes });
   } catch (error) {
     next(error);
   }
