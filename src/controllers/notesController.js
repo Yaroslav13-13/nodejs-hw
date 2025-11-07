@@ -1,26 +1,6 @@
 import { Note } from '../models/note.js';
 import createHttpError from 'http-errors';
 
-// export const getAllNotes = async (req, res, next) => {
-//   try {
-//     const { tag, search } = req.query;
-//     const filter = {};
-//     if (tag) {
-//       filter.tag = tag;
-//     }
-//     if (search) {
-//       filter.$text = { $search: search };
-//     }
-
-//     const notes = await Note.find(filter);
-//     res.status(200).json({ notes });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-// =====================================================
-
 export const getAllNotes = async (req, res, next) => {
   try {
     // параметри запиту
@@ -42,7 +22,7 @@ export const getAllNotes = async (req, res, next) => {
     const notesQuery = Note.find(filter);
 
     // паралельні запити
-    const [notes, totalNotes] = await Promise.all([
+    const [totalNotes, notes] = await Promise.all([
       notesQuery.clone().countDocuments(),
       notesQuery.skip(skip).limit(Number(perPage)).sort({ createdAt: -1 }),
     ]);
