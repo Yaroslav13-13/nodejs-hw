@@ -8,6 +8,8 @@ import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import notesRouter from './routes/notesRoutes.js';
 import { errors } from 'celebrate';
+import authRoutes from './routes/authRoutes.js';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 const app = express();
@@ -20,10 +22,12 @@ app.use(
   }),
 );
 app.use(cors());
+app.use(cookieParser());
 
 // ======= ROUTES =======
 
 app.use('/', notesRouter);
+app.use(authRoutes);
 
 // ======= MIDDLEWARE =======
 app.use(errors());
