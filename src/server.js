@@ -27,11 +27,11 @@ app.use(cookieParser());
 // ======= ROUTES =======
 
 app.use('/', notesRouter);
-app.use(authRoutes);
+app.use('/', authRoutes);
 
 // ======= MIDDLEWARE =======
-app.use(errors());
 app.use(notFoundHandler);
+app.use(errors());
 app.use(errorHandler);
 
 // ======= START SERVER =======

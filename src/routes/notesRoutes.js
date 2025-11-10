@@ -20,7 +20,7 @@ import { authenticate } from '../middleware/authenticate.js';
 
 const notesRouter = Router();
 
-notesRouter.use(authenticate);
+notesRouter.use('/notes', authenticate);
 notesRouter.get('/notes', celebrate(getAllNotesSchema), getAllNotes);
 notesRouter.get('/notes/:noteId', celebrate(noteIdSchema), getNoteById);
 notesRouter.post('/notes', celebrate(createNoteSchema), createNote);
