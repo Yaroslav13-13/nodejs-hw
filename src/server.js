@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import path from 'path';
 import helmet from 'helmet';
 import cors from 'cors';
 import { connectMongoDB } from './db/connectMongoDB.js';
@@ -10,8 +11,10 @@ import notesRouter from './routes/notesRoutes.js';
 import { errors } from 'celebrate';
 import authRoutes from './routes/authRoutes.js';
 import cookieParser from 'cookie-parser';
+import userRoutes from './routes/userRoutes.js';
 
-dotenv.config();
+dotenv.config({ path: path.resolve('.env') });
+// dotenv.config();
 const app = express();
 
 app.use(helmet());
@@ -28,6 +31,7 @@ app.use(cookieParser());
 
 app.use('/', notesRouter);
 app.use('/', authRoutes);
+app.use('/', userRoutes);
 
 // ======= MIDDLEWARE =======
 app.use(notFoundHandler);
